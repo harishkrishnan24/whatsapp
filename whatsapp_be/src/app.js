@@ -1,13 +1,14 @@
-import express from "express";
-import dotenv from "dotenv";
-import morgan from "morgan";
-import helmet from "helmet";
-import mongoSanitize from "express-mongo-sanitize";
-import cookieParser from "cookie-parser";
 import compression from "compression";
-import expressFileupload from "express-fileupload";
+import cookieParser from "cookie-parser";
 import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import expressFileupload from "express-fileupload";
+import mongoSanitize from "express-mongo-sanitize";
+import helmet from "helmet";
 import createHttpError from "http-errors";
+import morgan from "morgan";
+import routes from "./routes/index";
 
 dotenv.config();
 
@@ -26,9 +27,7 @@ app.use(compression());
 app.use(expressFileupload({ useTempFiles: true }));
 app.use(cors());
 
-app.get("/test", (req, res) => {
-  res.send("Hello from server");
-});
+app.use("/api/v1", routes);
 
 app.use(async (req, res, next) => {
   next(createHttpError.NotFound("This route does not exist"));
